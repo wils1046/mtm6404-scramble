@@ -54,8 +54,7 @@ const gameWords = [
 ];
 
 const WordScrambleGame = () => {
-  // Game state
-  const [gameState, setGameState] = React.useState('playing'); // 'playing' or 'gameOver'
+  const [gameState, setGameState] = React.useState('playing');
   const [currentWord, setCurrentWord] = React.useState('');
   const [scrambledWord, setScrambledWord] = React.useState('');
   const [remainingWords, setRemainingWords] = React.useState([]);
@@ -67,11 +66,9 @@ const WordScrambleGame = () => {
 
   const maxStrikes = 3;
 
-  // Load game state from localStorage on component mount
   React.useEffect(() => {
     const savedState = loadGameState();
     if (savedState && savedState.gameState && savedState.currentWord) {
-      // Restore game state from localStorage
       setGameState(savedState.gameState);
       setCurrentWord(savedState.currentWord);
       setScrambledWord(savedState.scrambledWord);
@@ -81,12 +78,10 @@ const WordScrambleGame = () => {
       setPasses(savedState.passes);
       setMessage('');
     } else {
-      // No saved game, start new game
       initializeGame();
     }
   }, []);
 
-  // Save game state to memory variables
   React.useEffect(() => {
     const gameData = {
       gameState,
@@ -101,7 +96,6 @@ const WordScrambleGame = () => {
   }, [gameState, currentWord, scrambledWord, remainingWords, points, strikes, passes]);
 
   const saveGameState = (data) => {
-    // Store individual values in localStorage
     try {
       localStorage.setItem('scramble_points', data.points.toString());
       localStorage.setItem('scramble_strikes', data.strikes.toString());
@@ -111,7 +105,6 @@ const WordScrambleGame = () => {
       localStorage.setItem('scramble_scrambledWord', data.scrambledWord);
       localStorage.setItem('scramble_remainingWords', JSON.stringify(data.remainingWords));
     } catch (e) {
-      // Fallback to memory storage if localStorage is not available
       window.gameData = data;
     }
   };
@@ -139,7 +132,6 @@ const WordScrambleGame = () => {
       }
       return '';
     } catch (e) {
-      // Fallback to memory storage if localStorage is not available
       return window.gameData || '';
     }
   };
@@ -154,7 +146,6 @@ const WordScrambleGame = () => {
       localStorage.removeItem('scramble_scrambledWord');
       localStorage.removeItem('scramble_remainingWords');
     } catch (e) {
-      // Fallback to memory storage if localStorage is not available
       window.gameData = '';
     }
   };
@@ -180,7 +171,6 @@ const WordScrambleGame = () => {
 
   const getNextWord = () => {
     if (remainingWords.length === 0) {
-      // No more words - game over with victory
       setGameState('gameOver');
       setMessage('You won!');
       return;
